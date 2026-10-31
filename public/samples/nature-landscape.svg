@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600">
+  <defs>
+    <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#4B95C6"/>
+      <stop offset="45%" stop-color="#72BFE9"/>
+      <stop offset="85%" stop-color="#A1E3F9"/>
+      <stop offset="100%" stop-color="#FCE1A8"/>
+    </linearGradient>
+    <linearGradient id="sunGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FFF5D1"/>
+      <stop offset="100%" stop-color="#FDB953"/>
+    </linearGradient>
+    <linearGradient id="waterGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#3C7F99"/>
+      <stop offset="50%" stop-color="#245F73"/>
+      <stop offset="100%" stop-color="#143B4A"/>
+    </linearGradient>
+    <linearGradient id="distantMtn" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#7A93A6"/>
+      <stop offset="100%" stop-color="#4B6275"/>
+    </linearGradient>
+    <linearGradient id="nearMtn" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#375543"/>
+      <stop offset="100%" stop-color="#1F3628"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Sky -->
+  <rect width="800" height="600" fill="url(#skyGrad)"/>
+
+  <!-- Morning Sun -->
+  <circle cx="580" cy="220" r="48" fill="url(#sunGrad)" opacity="0.9"/>
+  <circle cx="580" cy="220" r="90" fill="#FFF2BD" opacity="0.25"/>
+
+  <!-- Clouds -->
+  <path d="M 120 180 Q 150 150 200 160 Q 250 140 310 165 Q 360 150 410 175 Q 440 200 400 215 L 140 215 Z" fill="#FFFFFF" opacity="0.55"/>
+  <path d="M 450 130 Q 480 110 520 120 Q 560 105 610 125 Q 640 145 610 160 L 460 160 Z" fill="#FFFFFF" opacity="0.4"/>
+
+  <!-- Distant Snowcapped Peaks -->
+  <polygon points="180,360 320,170 460,360" fill="url(#distantMtn)"/>
+  <polygon points="320,170 290,230 320,250 345,225 365,245 390,225" fill="#E8F1F5"/>
+
+  <polygon points="380,380 520,200 660,380" fill="#5F7687"/>
+  <polygon points="520,200 485,260 520,275 545,255 570,275 595,255" fill="#F0F6F9"/>
+
+  <polygon points="60,380 180,240 310,380" fill="#4B6275"/>
+
+  <!-- Midground Hills / Evergreen Slopes -->
+  <path d="M 0 420 Q 180 320 380 390 Q 580 330 800 410 L 800 600 L 0 600 Z" fill="url(#nearMtn)"/>
+  <path d="M 0 470 Q 220 400 440 450 Q 640 410 800 460 L 800 600 L 0 600 Z" fill="#2E4F39"/>
+
+  <!-- Lake Water -->
+  <path d="M 0 480 Q 400 470 800 485 L 800 600 L 0 600 Z" fill="url(#waterGrad)"/>
+
+  <!-- Lake Sun Reflection -->
+  <path d="M 560 485 L 600 485 L 620 600 L 540 600 Z" fill="#FDB953" opacity="0.25"/>
+
+  <!-- Foreground Shore and Pines -->
+  <path d="M 0 540 Q 240 510 400 560 Q 600 520 800 570 L 800 600 L 0 600 Z" fill="#223321"/>
+  <!-- Shore pebbles / Earthy bank -->
+  <path d="M 0 570 Q 300 550 500 580 Q 650 565 800 590 L 800 600 L 0 600 Z" fill="#8C7A58"/>
+
+  <!-- Pine Tree Silhouettes -->
+  <polygon points="60,540 40,570 80,570" fill="#162719"/>
+  <polygon points="60,515 45,545 75,545" fill="#162719"/>
+  <polygon points="60,490 50,520 70,520" fill="#162719"/>
+
+  <polygon points="120,530 95,570 145,570" fill="#1A3320"/>
+  <polygon points="120,500 100,535 140,535" fill="#1A3320"/>
+  <polygon points="120,470 110,505 130,505" fill="#1A3320"/>
+
+  <polygon points="720,535 695,575 745,575" fill="#1A3320"/>
+  <polygon points="720,505 702,540 738,540" fill="#1A3320"/>
+  <polygon points="720,475 710,510 730,510" fill="#1A3320"/>
+</svg>

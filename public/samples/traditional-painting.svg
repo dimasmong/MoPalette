@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600">
+  <defs>
+    <!-- Painterly underdrawing wash -->
+    <linearGradient id="oilCanvas" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#EADBCE"/>
+      <stop offset="50%" stop-color="#D6C0AB"/>
+      <stop offset="100%" stop-color="#BFA58C"/>
+    </linearGradient>
+    <linearGradient id="skyWash" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#265073"/>
+      <stop offset="40%" stop-color="#4F709C"/>
+      <stop offset="80%" stop-color="#C5A880"/>
+      <stop offset="100%" stop-color="#E2703A"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Textured Canvas Ground -->
+  <rect width="800" height="600" fill="url(#oilCanvas)"/>
+
+  <!-- Expressive Sky Impasto Layers -->
+  <rect width="800" height="380" fill="url(#skyWash)"/>
+
+  <!-- Painterly Cloud & Sun Brushstrokes -->
+  <ellipse cx="480" cy="220" rx="90" ry="25" fill="#E8B86D" transform="rotate(-6 480 220)"/>
+  <ellipse cx="440" cy="205" rx="70" ry="20" fill="#F8E7B4" transform="rotate(-3 440 205)"/>
+  <ellipse cx="460" cy="195" rx="40" ry="14" fill="#FFFFFF" opacity="0.9"/>
+  <ellipse cx="280" cy="160" rx="140" ry="22" fill="#3D5A80" opacity="0.75" transform="rotate(4 280 160)"/>
+  <ellipse cx="620" cy="140" rx="110" ry="18" fill="#32527B" opacity="0.8" transform="rotate(-4 620 140)"/>
+  <ellipse cx="380" cy="110" rx="160" ry="24" fill="#1D3557" opacity="0.85"/>
+
+  <!-- Alizarin & Orange Horizon Glow -->
+  <ellipse cx="400" cy="360" rx="380" ry="35" fill="#D94F3D" opacity="0.6"/>
+  <ellipse cx="420" cy="345" rx="260" ry="22" fill="#E88D38" opacity="0.75"/>
+  <ellipse cx="450" cy="335" rx="150" ry="16" fill="#F3C644" opacity="0.85"/>
+
+  <!-- Distant Blue Ridge Mountain Strokes -->
+  <path d="M 0 350 Q 180 260 380 320 Q 560 270 800 340 L 800 420 L 0 420 Z" fill="#2E4A62"/>
+  <path d="M 80 340 Q 240 280 440 330 Q 640 290 800 335 L 800 420 L 80 420 Z" fill="#416788" opacity="0.7"/>
+
+  <!-- Midground Hills with Olive & Ochre Texture -->
+  <path d="M 0 390 Q 220 330 460 380 Q 680 340 800 400 L 800 600 L 0 600 Z" fill="#475C34"/>
+  <path d="M 0 430 Q 260 370 520 420 Q 700 380 800 430 L 800 600 L 0 600 Z" fill="#697A3E"/>
+
+  <!-- Expressive Brushstroke Slashes (Impasto Effect) -->
+  <!-- Ochre Field Highlights -->
+  <rect x="120" y="420" width="160" height="18" rx="8" fill="#D49B35" transform="rotate(-4 120 420)"/>
+  <rect x="260" y="445" width="220" height="22" rx="9" fill="#B88028" transform="rotate(2 260 445)"/>
+  <rect x="460" y="415" width="190" height="16" rx="7" fill="#E5B242" transform="rotate(-3 460 415)"/>
+  <rect x="80" y="460" width="180" height="20" rx="9" fill="#935723" transform="rotate(3 80 460)"/>
+  <rect x="340" y="480" width="260" height="26" rx="10" fill="#BF572A" transform="rotate(-2 340 480)"/>
+  <rect x="520" y="460" width="220" height="22" rx="9" fill="#783A1E" transform="rotate(4 520 460)"/>
+
+  <!-- Water Reflection Pond in Foreground -->
+  <path d="M 180 500 Q 400 480 620 505 Q 400 580 180 500 Z" fill="#244B66"/>
+  <path d="M 220 510 Q 400 495 580 515 Q 400 565 220 510 Z" fill="#467899"/>
+  <ellipse cx="400" cy="525" rx="110" ry="12" fill="#E88D38" opacity="0.6"/>
+  <ellipse cx="400" cy="528" rx="60" ry="7" fill="#F8E7B4" opacity="0.8"/>
+
+  <!-- Foreground Deep Earth & Cypress/Tree Slashes -->
+  <!-- Left Tree Group -->
+  <path d="M 80 280 C 60 360 40 460 70 570 C 90 570 120 560 110 460 C 100 360 110 280 80 280 Z" fill="#1C2E1A"/>
+  <path d="M 95 300 C 85 370 70 440 90 520" stroke="#3A5A32" stroke-width="8" stroke-linecap="round"/>
+  <path d="M 60 380 C 45 440 40 500 55 560" stroke="#142113" stroke-width="12" stroke-linecap="round"/>
+
+  <!-- Right Cypress Silhouette -->
+  <path d="M 710 220 C 690 320 675 420 700 560 C 725 560 750 540 735 420 C 725 320 735 220 710 220 Z" fill="#152618"/>
+  <path d="M 720 250 C 705 340 695 430 715 510" stroke="#2B4D2B" stroke-width="9" stroke-linecap="round"/>
+  <path d="M 740 320 C 730 400 735 480 740 550" stroke="#0E1A10" stroke-width="10" stroke-linecap="round"/>
+
+  <!-- Foreground Ochre & Burnt Umber Ground Strokes -->
+  <path d="M 0 540 Q 300 510 500 550 Q 700 520 800 560 L 800 600 L 0 600 Z" fill="#4A2614"/>
+  <rect x="20" y="565" width="240" height="20" rx="8" fill="#80411F" transform="rotate(-1 20 565)"/>
+  <rect x="280" y="560" width="300" height="24" rx="10" fill="#994F25" transform="rotate(1 280 560)"/>
+  <rect x="580" y="565" width="200" height="20" rx="8" fill="#5E2F16" transform="rotate(-2 580 565)"/>
+  <rect x="180" y="580" width="180" height="15" rx="6" fill="#C27D38"/>
+</svg>

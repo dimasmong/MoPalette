@@ -1,21 +1,25 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#7c3aed" />
-    <meta
-      name="description"
-      content="MoPalette — Standalone image color palette extractor. Extract, refine, organize, and export color palettes from any image with 100% in-browser privacy."
-    />
-    <meta
-      name="keywords"
-      content="color palette extractor, image color picker, palette generator, eyedropper, OKLCH, WCAG contrast, Color Thief, PNG SVG CSS export"
-    />
-    <title>MoPalette — Extract Colors From Any Image</title>
+    <title>MoPalette — Modern Color Palette Generator & Image Extractor</title>
+    <meta name="description" content="MoPalette is a modern color palette generator and local image color extraction tool for designers, developers, and creators. Generate harmonies, check contrast, and export palettes with ease." />
+    
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="MoPalette — Modern Color Palette Generator" />
+    <meta property="og:description" content="Generate harmonious color palettes and extract colors from images locally with privacy and precision." />
+    <meta property="og:image" content="/og-image.png" />
+    <meta name="theme-color" content="#A1E3F9" />
+
+    <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   </head>
-  <body>
+  <body class="bg-light-bg dark:bg-dark-bg text-light-text dark:text-dark-text antialiased selection:bg-brand selection:text-brand-darkText min-h-screen">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

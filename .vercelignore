@@ -1,0 +1,10 @@
+.git
+.github
+tests
+scripts
+.vscode
+.idea
+*.log
+README.md
+THIRD_PARTY_NOTICES.md
+LICENSE

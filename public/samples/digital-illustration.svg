@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600">
+  <defs>
+    <linearGradient id="bgSynth" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0E0725"/>
+      <stop offset="45%" stop-color="#260F4D"/>
+      <stop offset="75%" stop-color="#6B116E"/>
+      <stop offset="100%" stop-color="#C2296E"/>
+    </linearGradient>
+    <linearGradient id="sunSynth" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FFE066"/>
+      <stop offset="40%" stop-color="#FF5E7E"/>
+      <stop offset="100%" stop-color="#9A00FF"/>
+    </linearGradient>
+    <linearGradient id="gridGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FF2E93"/>
+      <stop offset="100%" stop-color="#00F0FF"/>
+    </linearGradient>
+    <linearGradient id="neonGlow" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#00F0FF"/>
+      <stop offset="50%" stop-color="#FF5E7E"/>
+      <stop offset="100%" stop-color="#FFB703"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Dark Cosmic Gradient -->
+  <rect width="800" height="600" fill="url(#bgSynth)"/>
+
+  <!-- Geometric Stars -->
+  <circle cx="120" cy="90" r="2.5" fill="#00F0FF"/>
+  <circle cx="280" cy="70" r="1.5" fill="#FFE066"/>
+  <circle cx="680" cy="110" r="2" fill="#00F0FF"/>
+  <circle cx="740" cy="50" r="3" fill="#FF5E7E"/>
+  <circle cx="510" cy="80" r="1.5" fill="#FFFFFF"/>
+  <circle cx="80" cy="180" r="2" fill="#FFE066"/>
+
+  <!-- Giant Retro Sun with Horizon Stripes -->
+  <circle cx="400" cy="270" r="130" fill="url(#sunSynth)"/>
+
+  <!-- Sun Horizontal Cutouts -->
+  <rect x="250" y="270" width="300" height="6" fill="#260F4D"/>
+  <rect x="250" y="286" width="300" height="10" fill="#3D1055"/>
+  <rect x="250" y="306" width="300" height="15" fill="#521160"/>
+  <rect x="250" y="331" width="300" height="22" fill="#6B116E"/>
+
+  <!-- Futuristic Mountain Wireframes / Polygons -->
+  <polygon points="40,380 220,180 390,380" fill="#1B0C3B" stroke="#FF2E93" stroke-width="2"/>
+  <polygon points="120,380 220,180 260,380" fill="#2D1259" stroke="#00F0FF" stroke-width="1.5"/>
+
+  <polygon points="410,380 580,210 760,380" fill="#180B35" stroke="#00F0FF" stroke-width="2"/>
+  <polygon points="410,380 580,210 520,380" fill="#2A1054" stroke="#FF2E93" stroke-width="1.5"/>
+
+  <polygon points="260,380 390,260 520,380" fill="#351368" stroke="#FFB703" stroke-width="2"/>
+
+  <!-- Ground Horizon Plane -->
+  <rect x="0" y="380" width="800" height="220" fill="#090317"/>
+
+  <!-- Perspective Grid Lines -->
+  <!-- Horizon line -->
+  <line x1="0" y1="380" x2="800" y2="380" stroke="#00F0FF" stroke-width="3"/>
+  <line x1="0" y1="392" x2="800" y2="392" stroke="#FF2E93" stroke-width="1.5" opacity="0.6"/>
+  <line x1="0" y1="410" x2="800" y2="410" stroke="#FF2E93" stroke-width="2" opacity="0.7"/>
+  <line x1="0" y1="435" x2="800" y2="435" stroke="#FF2E93" stroke-width="2.5" opacity="0.8"/>
+  <line x1="0" y1="470" x2="800" y2="470" stroke="#FF2E93" stroke-width="3" opacity="0.9"/>
+  <line x1="0" y1="520" x2="800" y2="520" stroke="#00F0FF" stroke-width="3.5"/>
+  <line x1="0" y1="585" x2="800" y2="585" stroke="#00F0FF" stroke-width="4"/>
+
+  <!-- Radiating Grid Lines -->
+  <line x1="400" y1="380" x2="-200" y2="600" stroke="#00F0FF" stroke-width="2.5"/>
+  <line x1="400" y1="380" x2="0" y2="600" stroke="#00F0FF" stroke-width="2.5"/>
+  <line x1="400" y1="380" x2="150" y2="600" stroke="#00F0FF" stroke-width="2.5"/>
+  <line x1="400" y1="380" x2="280" y2="600" stroke="#00F0FF" stroke-width="2.5"/>
+  <line x1="400" y1="380" x2="400" y2="600" stroke="#00F0FF" stroke-width="3"/>
+  <line x1="400" y1="380" x2="520" y2="600" stroke="#00F0FF" stroke-width="2.5"/>
+  <line x1="400" y1="380" x2="650" y2="600" stroke="#00F0FF" stroke-width="2.5"/>
+  <line x1="400" y1="380" x2="800" y2="600" stroke="#00F0FF" stroke-width="2.5"/>
+  <line x1="400" y1="380" x2="1000" y2="600" stroke="#00F0FF" stroke-width="2.5"/>
+
+  <!-- Geometric Floating Monoliths -->
+  <polygon points="380,430 420,430 440,510 360,510" fill="url(#neonGlow)" opacity="0.8"/>
+  <circle cx="400" cy="460" r="14" fill="#090317"/>
+</svg>

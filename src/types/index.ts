@@ -1,96 +1,160 @@
-export interface RGB {
-  r: number
-  g: number
-  b: number
+export type ColorFormat = 'hex' | 'rgb' | 'hsl' | 'hsv' | 'oklch' | 'lab';
+
+export interface ColorItem {
+  id: string;
+  hex: string; // #RRGGBB
+  locked: boolean;
+  name?: string;
 }
 
-export interface HSL {
-  h: number // 0 - 360
-  s: number // 0 - 100
-  l: number // 0 - 100
+export type HarmonyMode =
+  | 'none'
+  | 'analogous'
+  | 'complementary'
+  | 'triadic'
+  | 'tetradic'
+  | 'split-complementary'
+  | 'monochromatic';
+
+export type GenerationMood =
+  | 'random'
+  | 'balanced'
+  | 'vibrant'
+  | 'pastel'
+  | 'muted'
+  | 'earthy'
+  | 'monochromatic'
+  | 'custom';
+
+export interface Palette {
+  id: string;
+  name: string;
+  colors: ColorItem[];
+  createdAt: number;
+  isFavorite?: boolean;
+  tags?: string[];
 }
 
-export interface OKLCH {
-  l: number // 0 - 1 (Lightness)
-  c: number // 0 - 0.4 (Chroma)
-  h: number // 0 - 360 (Hue)
+export type ExtractionMethod = 'dominant' | 'vibrant' | 'muted' | 'balanced';
+export type ImageSortMode = 'prominence' | 'luminance' | 'hue';
+
+export interface ExtractedColor {
+  hex: string;
+  percentage: number;
+  count: number;
+  name?: string;
 }
 
-export interface WCAGContrast {
-  whiteRatio: number
-  blackRatio: number
-  whiteAA: boolean
-  whiteAAA: boolean
-  blackAA: boolean
-  blackAAA: boolean
-  whiteAALarge: boolean
-  whiteAAALarge: boolean
-  blackAALarge: boolean
-  blackAAALarge: boolean
-  suggestedForeground: '#ffffff' | '#000000'
-  relativeLuminance: number
+export interface SampleImage {
+  id: string;
+  titleKey: string;
+  categoryKey: string;
+  descriptionKey: string;
+  url: string;
+  attribution: string;
 }
 
-export type SwatchRole =
-  | 'Dominant'
-  | 'Vibrant'
-  | 'Muted'
-  | 'DarkVibrant'
-  | 'DarkMuted'
-  | 'LightVibrant'
-  | 'LightMuted'
-  | 'Manual'
-  | 'Custom'
+export type ExportFormat =
+  | 'png'
+  | 'svg'
+  | 'json'
+  | 'css'
+  | 'scss'
+  | 'tailwind'
+  | 'txt'
+  | 'gpl';
 
-export interface PaletteColor {
-  id: string
-  hex: string // e.g. "#7C3AED" (uppercase 6-char hex)
-  rgb: RGB
-  hsl: HSL
-  oklch: OKLCH
-  contrast: WCAGContrast
-  locked: boolean
-  population: number // estimated pixel cluster count
-  proportion: number // estimated percentage (0.0 to 1.0)
-  role?: SwatchRole
-  isManual?: boolean
+export type CardLayout = 'horizontal' | 'vertical' | 'grid';
+
+export interface ExportOptions {
+  format: ExportFormat;
+  layout: CardLayout;
+  includeLabels: boolean;
+  includeNames: boolean;
+  bgColor: 'transparent' | 'white' | 'dark' | 'brand';
+  resolutionMultiplier: number;
 }
 
-export type PalettePreset = 'balanced' | 'dominant' | 'vibrant' | 'muted'
+export type Language = 'en' | 'id';
 
-export type ExtractionQuality = 'fast' | 'balanced' | 'high'
+export type ColorBlindnessType =
+  | 'normal'
+  | 'protanopia'
+  | 'deuteranopia'
+  | 'tritanopia'
+  | 'grayscale';
 
-export type ColorSpaceOption = 'oklch' | 'rgb'
+// --- Semantic Color System for Live Preview (V2) ---
+export type ColorRole =
+  | 'primary'
+  | 'secondary'
+  | 'background'
+  | 'surface'
+  | 'text'
+  | 'mutedText'
+  | 'accent'
+  | 'border'
+  | 'success'
+  | 'warning'
+  | 'danger';
 
-export interface ExtractionConfig {
-  colorCount: number // 2 - 20
-  preset: PalettePreset
-  quality: ExtractionQuality
-  colorSpace: ColorSpaceOption
-  ignoreTransparent: boolean
-  compositingBg: string
+export type ColorSource = 'palette' | 'preset' | 'manual' | 'derived';
+
+export interface RoleAssignment {
+  color: string;
+  source: ColorSource;
+  isManualOverride: boolean;
 }
 
-export interface ImageSourceData {
-  file: File | null
-  url: string
-  name: string
-  width: number
-  height: number
-  sizeBytes: number
-  aspectRatio: number
+export type RoleAssignments = Record<ColorRole, RoleAssignment>;
+
+export type PreviewAppearance = 'light' | 'dark' | 'app';
+
+export interface RoleContrastInfo {
+  ratio: number;
+  passesAA: boolean;
+  passesAAA: boolean;
+  readableForeground: string;
+  suggestedColor?: string;
+  warning?: string;
 }
 
-export type ExportFormat = 'png' | 'svg' | 'css' | 'json' | 'txt'
+export type PreviewContrastReport = Partial<Record<ColorRole, RoleContrastInfo>>;
 
-export type Theme = 'light' | 'dark'
+export interface RoleMapping {
+  primary: string;
+  secondary: string;
+  background: string;
+  surface: string;
+  text: string;
+  accent: string;
+}
 
-export type Language = 'en' | 'id'
+export interface ContrastAnalysis {
+  ratio: number;
+  textColor: string;
+  bgColor: string;
+  normalTextAA: boolean;
+  normalTextAAA: boolean;
+  largeTextAA: boolean;
+  largeTextAAA: boolean;
+  uiComponentAA: boolean;
+  suggestedTextLight?: string;
+  suggestedTextDark?: string;
+}
 
-export interface EyedropperSample {
-  x: number
-  y: number
-  hex: string
-  rgb: RGB
-  isTransparent: boolean
+export interface ShadeStep {
+  stop: number; // 50, 100, 200 ... 950
+  hex: string;
+  isSource: boolean;
+  textColor: '#FFFFFF' | '#16242E';
+  contrastRatio: number;
+}
+
+export interface PalettePreset {
+  id: string;
+  name: string;
+  category: string;
+  colors: string[];
+  tags?: string[];
 }

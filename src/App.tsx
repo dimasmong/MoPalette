@@ -1,327 +1,183 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { ColorDetailPanel } from './components/ColorDetailPanel'
-import { ExportModal } from './components/ExportModal'
-import { FAQSection } from './components/FAQSection'
-import { Footer } from './components/Footer'
-import { Hero } from './components/Hero'
-import { ImageWorkspace } from './components/ImageWorkspace'
-import { Navbar } from './components/Navbar'
-import { OpenSourceModal } from './components/OpenSourceModal'
-import { PaletteControls } from './components/PaletteControls'
-import { PaletteSwatches } from './components/PaletteSwatches'
-import { PrivacyModal } from './components/PrivacyModal'
-import { UploadZone } from './components/UploadZone'
-import { UsageExplanation } from './components/UsageExplanation'
-import { useClipboard } from './hooks/useClipboard'
-import { useLanguage } from './hooks/useLanguage'
-import { usePaletteState } from './hooks/usePaletteState'
-import { useTheme } from './hooks/useTheme'
-import { extractPaletteFromSource } from './lib/color/extractor'
-import type { EyedropperSample, ImageSourceData, RGB } from './types'
+import React, { useState } from 'react';
+import { ThemeProvider } from './context/ThemeContext';
+import { LanguageProvider } from './context/LanguageContext';
+import { PaletteProvider, usePalette } from './context/PaletteContext';
+import { ToastProvider } from './components/common/Toast';
+import { Header } from './components/layout/Header';
+import { Hero } from './components/layout/Hero';
+import { Footer } from './components/layout/Footer';
 
-export const App: React.FC = () => {
-  const { theme, toggleTheme } = useTheme()
-  const { lang, toggleLang, t } = useLanguage()
-  const { feedback, copyToClipboard } = useClipboard()
+// Feature Sections
+import { PaletteToolbar } from './components/features/palette-generator/PaletteToolbar';
+import { PaletteGrid } from './components/features/palette-generator/PaletteGrid';
+import { ImageExtractorSection } from './components/features/image-extractor/ImageExtractorSection';
+import { ContrastCheckerSection } from './components/features/contrast-checker/ContrastCheckerSection';
+import { ShadeGeneratorSection } from './components/features/shade-generator/ShadeGeneratorSection';
+import { GradientGeneratorSection } from './components/features/gradient-generator/GradientGeneratorSection';
+import { LivePreviewSection } from './components/features/palette-preview/LivePreviewSection';
+import { PresetSection } from './components/features/presets/PresetSection';
+import { FAQSection } from './components/features/info/FAQSection';
+import { AttributionSection } from './components/features/info/AttributionSection';
+import { PrivacySection } from './components/features/info/PrivacySection';
 
-  const {
-    colors,
-    activeId,
-    activeColor,
-    config,
-    setActiveId,
-    setPalette,
-    toggleLock,
-    removeSwatch,
-    addSwatch,
-    replaceSwatch,
-    moveSwatch,
-    resetPalette,
-    updateConfig,
-  } = usePaletteState()
+// Modals
+import { ColorEditorModal } from './components/features/color-editor/ColorEditorModal';
+import { ExportModal } from './components/features/export/ExportModal';
+import { SavedPalettesModal } from './components/features/saved-palettes/SavedPalettesModal';
+import { ColorItem, PalettePreset } from './types';
 
-  // Image Source State
-  const [currentImage, setCurrentImage] = useState<ImageSourceData | null>(null)
-  const [currentImgElement, setCurrentImgElement] = useState<HTMLImageElement | null>(null)
-  const [isExtracting, setIsExtracting] = useState(false)
-  const [notification, setNotification] = useState<string | null>(null)
+const MainAppContent: React.FC = () => {
+  const { activeColorForEditor, setActiveColorForEditor, updateSwatchColor, generateNewPalette } =
+    usePalette();
 
-  // Modals
-  const [isExportOpen, setIsExportOpen] = useState(false)
-  const [isOpenSourceOpen, setIsOpenSourceOpen] = useState(false)
-  const [isPrivacyOpen, setIsPrivacyOpen] = useState(false)
+  const [activeTab, setActiveTab] = useState<string>('generator');
+  const [isExportOpen, setIsExportOpen] = useState<boolean>(false);
+  const [isSavedOpen, setIsSavedOpen] = useState<boolean>(false);
+  const [previewPreset, setPreviewPreset] = useState<PalettePreset | null>(null);
 
-  const hiddenReplaceInputRef = useRef<HTMLInputElement>(null)
+  const handleOpenEditor = (color: ColorItem) => {
+    setActiveColorForEditor(color);
+  };
 
-  // Show a temporary banner notification
-  const showNotification = useCallback((msg: string) => {
-    setNotification(msg)
-    setTimeout(() => setNotification(null), 3000)
-  }, [])
+  const handleCloseEditor = () => {
+    setActiveColorForEditor(null);
+  };
 
-  // Execute actual Color Thief palette extraction
-  const performExtraction = useCallback(
-    (
-      imgEl: HTMLImageElement,
-      currentCfg = config,
-      isFresh = false
-    ) => {
-      setIsExtracting(true)
-      try {
-        const extracted = extractPaletteFromSource(
-          imgEl,
-          currentCfg,
-          isFresh ? [] : colors
-        )
-        setPalette(extracted, isFresh)
-      } catch (err) {
-        console.error('Palette extraction failed:', err)
-        showNotification('Extraction warning. Please try another image or preset.')
-      } finally {
-        setIsExtracting(false)
+  // Global Spacebar shortcut for Generator tab
+  React.useEffect(() => {
+    if (activeTab !== 'generator') return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.code !== 'Space' && e.key !== ' ') return;
+      if (e.repeat) return;
+
+      if (isExportOpen || isSavedOpen || !!activeColorForEditor) return;
+
+      const target = e.target as HTMLElement | null;
+      if (!target) return;
+
+      const tagName = target.tagName ? target.tagName.toUpperCase() : '';
+      if (tagName === 'INPUT' || tagName === 'TEXTAREA' || tagName === 'SELECT') return;
+      if (target.isContentEditable || target.closest('[contenteditable="true"]')) return;
+      if (
+        target.closest('[role="dialog"]') ||
+        target.closest('[role="listbox"]') ||
+        target.closest('[role="menu"]') ||
+        target.closest('[role="combobox"]') ||
+        target.closest('dialog')
+      ) {
+        return;
       }
-    },
-    [config, colors, setPalette, showNotification]
-  )
+      if (tagName === 'BUTTON') return;
 
-  // Handle image load
-  const handleImageLoaded = useCallback(
-    (imageData: ImageSourceData, imgElement: HTMLImageElement) => {
-      if (currentImage?.url && currentImage.url.startsWith('blob:')) {
-        URL.revokeObjectURL(currentImage.url)
-      }
-      setCurrentImage(imageData)
-      setCurrentImgElement(imgElement)
-      performExtraction(imgElement, config, true)
-    },
-    [currentImage, config, performExtraction]
-  )
+      e.preventDefault();
+      generateNewPalette();
+    };
 
-  // Handle re-triggering extraction when configuration changes
-  const handleConfigChange = (partial: Partial<typeof config>) => {
-    updateConfig(partial)
-    const newConfig = { ...config, ...partial }
-    if (currentImgElement) {
-      performExtraction(currentImgElement, newConfig, false)
-    }
-  }
-
-  // Handle manual eyedropper sample pick
-  const handleSampleColorPicked = useCallback(
-    (_sample: EyedropperSample) => {
-      // Eyedropper sample tracked
-    },
-    []
-  )
-
-  // Eyedropper action: replace active swatch
-  const handleReplaceActiveSwatch = (newRgb: RGB) => {
-    if (activeId) {
-      replaceSwatch(activeId, newRgb)
-      showNotification('Active swatch updated')
-    }
-  }
-
-  // Eyedropper action: add as new swatch
-  const handleAddSampleSwatch = (newRgb: RGB) => {
-    addSwatch(newRgb)
-    showNotification('Color added to palette')
-  }
-
-  // Remove image
-  const handleRemoveImage = () => {
-    if (currentImage?.url && currentImage.url.startsWith('blob:')) {
-      URL.revokeObjectURL(currentImage.url)
-    }
-    setCurrentImage(null)
-    setCurrentImgElement(null)
-    setPalette([])
-  }
-
-  // Trigger hidden replace input
-  const handleReplaceClick = () => {
-    hiddenReplaceInputRef.current?.click()
-  }
-
-  const handleHiddenFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files.length > 0) {
-      const file = e.target.files[0]
-      const objectUrl = URL.createObjectURL(file)
-      const img = new Image()
-      img.onload = () => {
-        handleImageLoaded(
-          {
-            file,
-            url: objectUrl,
-            name: file.name,
-            width: img.naturalWidth,
-            height: img.naturalHeight,
-            sizeBytes: file.size,
-            aspectRatio: img.naturalWidth / img.naturalHeight,
-          },
-          img
-        )
-      }
-      img.src = objectUrl
-    }
-  }
-
-  // Support URL hashes: #open-source and #privacy
-  useEffect(() => {
-    const checkHash = () => {
-      if (window.location.hash === '#open-source') {
-        setIsOpenSourceOpen(true)
-      } else if (window.location.hash === '#privacy') {
-        setIsPrivacyOpen(true)
-      }
-    }
-    checkHash()
-    window.addEventListener('hashchange', checkHash)
-    return () => window.removeEventListener('hashchange', checkHash)
-  }, [])
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [activeTab, isExportOpen, isSavedOpen, activeColorForEditor, generateNewPalette]);
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 selection:bg-purple-500 selection:text-white dark:bg-[#0b0a10] dark:text-slate-100 transition-colors">
-      {/* Hidden file input for replacing image */}
-      <input
-        ref={hiddenReplaceInputRef}
-        type="file"
-        accept="image/png,image/jpeg,image/webp,image/avif,image/*"
-        className="hidden"
-        onChange={handleHiddenFileInput}
-        onClick={(e) => {
-          ;(e.target as HTMLInputElement).value = ''
-        }}
+    <div className="min-h-screen flex flex-col bg-light-bg dark:bg-dark-bg text-light-text dark:text-dark-text selection:bg-brand selection:text-brand-darkText">
+      {/* Header */}
+      <Header
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        onOpenSaved={() => setIsSavedOpen(true)}
+        onOpenExport={() => setIsExportOpen(true)}
       />
 
-      {/* Global Toast Feedback */}
-      {(feedback || notification) && (
-        <div className="fixed bottom-6 right-6 z-50 rounded-xl bg-slate-900/90 px-4 py-2.5 text-xs font-semibold text-white shadow-xl backdrop-blur-md dark:bg-white/95 dark:text-slate-950 animate-in fade-in slide-in-from-bottom-2 duration-150">
-          {feedback || notification}
-        </div>
+      {/* Hero Section (Displayed on Generator tab) */}
+      {activeTab === 'generator' && (
+        <Hero
+          onGenerateClick={() => generateNewPalette()}
+          onExtractClick={() => setActiveTab('extractor')}
+        />
       )}
 
-      {/* Navigation Bar */}
-      <Navbar
-        t={t}
-        theme={theme}
-        lang={lang}
-        onToggleTheme={toggleTheme}
-        onToggleLang={toggleLang}
-        onOpenOpenSource={() => setIsOpenSourceOpen(true)}
-        onOpenPrivacy={() => setIsPrivacyOpen(true)}
-      />
-
-      {/* Main Container */}
-      <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-        {!currentImage ? (
-          /* Empty / Upload State */
-          <div className="flex flex-col gap-8">
-            <Hero t={t} />
-            <UploadZone
-              t={t}
-              onImageLoaded={handleImageLoaded}
-              onError={showNotification}
+      {/* Main Content Workspace Container */}
+      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        {activeTab === 'generator' && (
+          <div className="space-y-6">
+            <PaletteToolbar
+              onOpenExport={() => setIsExportOpen(true)}
+              onOpenSaved={() => setIsSavedOpen(true)}
             />
-          </div>
-        ) : (
-          /* Active Workspace (Two-column desktop layout, one-column mobile layout) */
-          <div className="flex flex-col gap-6">
-            <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
-              {/* Left Column (5/12 on large screens): Image preview & Eyedropper */}
-              <div className="lg:col-span-5">
-                <ImageWorkspace
-                  t={t}
-                  imageData={currentImage}
-                  imgElement={currentImgElement!}
-                  onReplaceImageClick={handleReplaceClick}
-                  onRemoveImage={handleRemoveImage}
-                  onSampleColorPicked={handleSampleColorPicked}
-                  onReplaceActiveSwatch={handleReplaceActiveSwatch}
-                  onAddSwatch={handleAddSampleSwatch}
-                  onCopyText={copyToClipboard}
-                  activeSwatchHex={activeColor?.hex}
-                />
-              </div>
-
-              {/* Right Column (7/12 on large screens): Controls, Swatches, Details */}
-              <div className="flex flex-col gap-6 lg:col-span-7">
-                {/* Extraction Configuration Controls */}
-                <PaletteControls
-                  t={t}
-                  config={config}
-                  onChangeConfig={handleConfigChange}
-                  onRegenerate={() => {
-                    if (currentImgElement) {
-                      performExtraction(currentImgElement, config, false)
-                    }
-                  }}
-                  onReset={resetPalette}
-                  isRegenerating={isExtracting}
-                />
-
-                {/* Interactive Palette Swatches */}
-                <PaletteSwatches
-                  t={t}
-                  colors={colors}
-                  activeId={activeId}
-                  onSelectSwatch={setActiveId}
-                  onToggleLock={toggleLock}
-                  onRemoveSwatch={removeSwatch}
-                  onAddSwatch={() => addSwatch()}
-                  onMoveSwatch={moveSwatch}
-                  onCopyText={copyToClipboard}
-                  onOpenExport={() => setIsExportOpen(true)}
-                />
-
-                {/* Selected Color Inspector & Contrast Assistance */}
-                <ColorDetailPanel
-                  t={t}
-                  color={activeColor}
-                  onCopyText={copyToClipboard}
-                />
-              </div>
-            </div>
+            <PaletteGrid onOpenEditor={handleOpenEditor} />
           </div>
         )}
 
-        {/* Informational Sections */}
-        <div className="mt-16 border-t border-slate-200/60 pt-8 dark:border-slate-800/60">
-          <UsageExplanation t={t} />
-          <FAQSection t={t} />
-        </div>
+        {activeTab === 'extractor' && (
+          <ImageExtractorSection onSendToGenerator={() => setActiveTab('generator')} />
+        )}
+
+        {activeTab === 'contrast' && <ContrastCheckerSection />}
+
+        {activeTab === 'shades' && <ShadeGeneratorSection />}
+
+        {activeTab === 'gradient' && <GradientGeneratorSection />}
+
+        {activeTab === 'preview' && (
+          <LivePreviewSection
+            initialPreset={previewPreset}
+            onClearInitialPreset={() => setPreviewPreset(null)}
+          />
+        )}
+
+        {activeTab === 'presets' && (
+          <PresetSection
+            onLoadPreset={() => setActiveTab('generator')}
+            onUseInPreview={(preset) => {
+              setPreviewPreset(preset);
+              setActiveTab('preview');
+            }}
+          />
+        )}
+
+        {activeTab === 'faq' && <FAQSection />}
+
+        {activeTab === 'attribution' && <AttributionSection />}
+
+        {activeTab === 'privacy' && <PrivacySection />}
       </main>
 
+      {/* Footer */}
+      <Footer onNavigateSection={(sec) => setActiveTab(sec)} />
+
       {/* Modals */}
+      <ColorEditorModal
+        color={activeColorForEditor}
+        isOpen={!!activeColorForEditor}
+        onClose={handleCloseEditor}
+        onSave={updateSwatchColor}
+      />
+
       <ExportModal
         isOpen={isExportOpen}
         onClose={() => setIsExportOpen(false)}
-        t={t}
-        colors={colors}
-        paletteName={currentImage?.name.replace(/\.[^/.]+$/, '') || 'MoPalette'}
-        onCopyText={copyToClipboard}
       />
 
-      <OpenSourceModal
-        isOpen={isOpenSourceOpen}
-        onClose={() => setIsOpenSourceOpen(false)}
-        t={t}
-      />
-
-      <PrivacyModal
-        isOpen={isPrivacyOpen}
-        onClose={() => setIsPrivacyOpen(false)}
-        t={t}
-      />
-
-      {/* Footer */}
-      <Footer
-        t={t}
-        onOpenOpenSource={() => setIsOpenSourceOpen(true)}
-        onOpenPrivacy={() => setIsPrivacyOpen(true)}
+      <SavedPalettesModal
+        isOpen={isSavedOpen}
+        onClose={() => setIsSavedOpen(false)}
       />
     </div>
-  )
+  );
+};
+
+export function App() {
+  return (
+    <ThemeProvider>
+      <LanguageProvider>
+        <ToastProvider>
+          <PaletteProvider>
+            <MainAppContent />
+          </PaletteProvider>
+        </ToastProvider>
+      </LanguageProvider>
+    </ThemeProvider>
+  );
 }
 
-export default App
+export default App;
